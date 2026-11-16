@@ -1,0 +1,99 @@
+VALIDATOR MISBEHAVIOR DRILL (SIMULATED DATA)
+validators: 53
+ledgers per run: 120
+seeds: 1001, 1002, 1003, 1004, 1005
+quorum: 36
+
+POOLED METRICS (5 seeds pooled; precision/recall/FPR as defined
+in simulator.score; FPR denominator is non-offense opportunities)
+baseline_clean: tp=0 fp=0 fn=0 tn=31800 precision=1.0000 recall=1.0000 fpr=0.0000
+equivocation_double_sign: tp=105 fp=0 fn=0 tn=31695 precision=1.0000 recall=1.0000 fpr=0.0000
+conflicting_validation_sets: tp=15 fp=0 fn=0 tn=31785 precision=1.0000 recall=1.0000 fpr=0.0000
+liveness_offline: tp=10 fp=0 fn=0 tn=31790 precision=1.0000 recall=1.0000 fpr=0.0000
+late_validations: tp=200 fp=0 fn=0 tn=31600 precision=1.0000 recall=1.0000 fpr=0.0000
+benign_divergence: tp=0 fp=0 fn=0 tn=31800 precision=1.0000 recall=1.0000 fpr=0.0000
+
+PER-SEED METRICS (tp/fp/fn/precision/recall per seed)
+baseline_clean seed=1001: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+baseline_clean seed=1002: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+baseline_clean seed=1003: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+baseline_clean seed=1004: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+baseline_clean seed=1005: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+equivocation_double_sign seed=1001: tp=21 fp=0 fn=0 precision=1.0000 recall=1.0000
+equivocation_double_sign seed=1002: tp=21 fp=0 fn=0 precision=1.0000 recall=1.0000
+equivocation_double_sign seed=1003: tp=21 fp=0 fn=0 precision=1.0000 recall=1.0000
+equivocation_double_sign seed=1004: tp=21 fp=0 fn=0 precision=1.0000 recall=1.0000
+equivocation_double_sign seed=1005: tp=21 fp=0 fn=0 precision=1.0000 recall=1.0000
+conflicting_validation_sets seed=1001: tp=3 fp=0 fn=0 precision=1.0000 recall=1.0000
+conflicting_validation_sets seed=1002: tp=3 fp=0 fn=0 precision=1.0000 recall=1.0000
+conflicting_validation_sets seed=1003: tp=3 fp=0 fn=0 precision=1.0000 recall=1.0000
+conflicting_validation_sets seed=1004: tp=3 fp=0 fn=0 precision=1.0000 recall=1.0000
+conflicting_validation_sets seed=1005: tp=3 fp=0 fn=0 precision=1.0000 recall=1.0000
+liveness_offline seed=1001: tp=2 fp=0 fn=0 precision=1.0000 recall=1.0000
+liveness_offline seed=1002: tp=2 fp=0 fn=0 precision=1.0000 recall=1.0000
+liveness_offline seed=1003: tp=2 fp=0 fn=0 precision=1.0000 recall=1.0000
+liveness_offline seed=1004: tp=2 fp=0 fn=0 precision=1.0000 recall=1.0000
+liveness_offline seed=1005: tp=2 fp=0 fn=0 precision=1.0000 recall=1.0000
+late_validations seed=1001: tp=40 fp=0 fn=0 precision=1.0000 recall=1.0000
+late_validations seed=1002: tp=40 fp=0 fn=0 precision=1.0000 recall=1.0000
+late_validations seed=1003: tp=40 fp=0 fn=0 precision=1.0000 recall=1.0000
+late_validations seed=1004: tp=40 fp=0 fn=0 precision=1.0000 recall=1.0000
+late_validations seed=1005: tp=40 fp=0 fn=0 precision=1.0000 recall=1.0000
+benign_divergence seed=1001: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+benign_divergence seed=1002: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+benign_divergence seed=1003: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+benign_divergence seed=1004: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+benign_divergence seed=1005: tp=0 fp=0 fn=0 precision=1.0000 recall=1.0000
+
+RULE COUNTS POOLED (detections per rule across 5 seeds)
+baseline_clean: R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+equivocation_double_sign: R1=100 R2=5 R3=0 R4=0 R5=0 R6=0 R7=0
+conflicting_validation_sets: R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=15
+liveness_offline: R1=0 R2=0 R3=0 R4=0 R5=10 R6=0 R7=0
+late_validations: R1=0 R2=0 R3=0 R4=0 R5=0 R6=200 R7=0
+benign_divergence: R1=0 R2=0 R3=0 R4=0 R5=0 R6=0 R7=0
+
+QUORUM AND VOLUME
+baseline_clean: quorum_min=53 validations_pooled=31800
+equivocation_double_sign: quorum_min=53 validations_pooled=31905
+conflicting_validation_sets: quorum_min=50 validations_pooled=31800
+liveness_offline: quorum_min=51 validations_pooled=31500
+late_validations: quorum_min=53 validations_pooled=31800
+benign_divergence: quorum_min=51 validations_pooled=31800
+quorum holds on every ledger: yes (min=50, quorum=36)
+
+PER-EVENT LOGS (seed 1001) SHA-256
+events-baseline_clean-seed1001.jsonl: 0 events sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+events-equivocation_double_sign-seed1001.jsonl: 21 events sha256=194c9bd30229dfc94786dbeb89921cc4fa3e4c9851dacf3ba9067269ed659286
+events-conflicting_validation_sets-seed1001.jsonl: 3 events sha256=a75a54ac2d2ec69c18da185932c92de31e921933124e7eea0f9c44d40becbdff
+events-liveness_offline-seed1001.jsonl: 2 events sha256=b87a2011b0a19b631dba8a9381610fbab417cd942255207c073563457754b1fc
+events-late_validations-seed1001.jsonl: 40 events sha256=dbb18af7b7da6d1c7d9aced6f459a82d6c9599fcd88f417592bbae8c973f76fa
+events-benign_divergence-seed1001.jsonl: 0 events sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+CANONICAL RESULTS SHA-256
+results.json sha256=d26cee1b0eed63a44b06b80a440a119fed5090e15e40c88a9c3913be28d20d7b
+
+CHECKS
+PASS: equivocation recall 1.0000 and precision 1.0000
+PASS: conflicting sets recall 1.0000 and precision 1.0000
+PASS: conflicting sets produce zero R1 flags
+PASS: liveness recall 1.0000 and precision 1.0000
+PASS: late recall 1.0000 and precision 1.0000
+PASS: benign divergence false positives 0
+PASS: baseline false positives 0
+PASS: quorum holds on every ledger (min >= 36)
+PASS: baseline_clean has zero R3 flags
+PASS: baseline_clean has zero R4 flags
+PASS: equivocation_double_sign has zero R3 flags
+PASS: equivocation_double_sign has zero R4 flags
+PASS: conflicting_validation_sets has zero R3 flags
+PASS: conflicting_validation_sets has zero R4 flags
+PASS: liveness_offline has zero R3 flags
+PASS: liveness_offline has zero R4 flags
+PASS: late_validations has zero R3 flags
+PASS: late_validations has zero R4 flags
+PASS: benign_divergence has zero R3 flags
+PASS: benign_divergence has zero R4 flags
+PASS: determinism self-check (seed 1001 regenerated twice)
+
+ALL CHECKS PASSED

@@ -1,0 +1,21 @@
+DETERMINISM CHECK: DRILL UNDER DIFFERENT PYTHONHASHSEED VALUES
+method: copy simulator.py, run_drill.py, scenarios.json to a scratch directory,
+run with PYTHONHASHSEED set, diff drill log, results.json and all per-event
+logs against the committed pack outputs
+
+PYTHONHASHSEED=1: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+PYTHONHASHSEED=2: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+PYTHONHASHSEED=3: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+PYTHONHASHSEED=42: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+PYTHONHASHSEED=99: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+PYTHONHASHSEED=777: exit=0 drill.log IDENTICAL results.json IDENTICAL all event logs IDENTICAL
+
+reference hashes (committed pack outputs):
+0390c5371b7724f53686c78f09e92245fc5d492bb0dda0de3eefaa23bb322c0f  logs/drill-run-1.log
+d26cee1b0eed63a44b06b80a440a119fed5090e15e40c88a9c3913be28d20d7b  results.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  logs/events-baseline_clean-seed1001.jsonl
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  logs/events-benign_divergence-seed1001.jsonl
+a75a54ac2d2ec69c18da185932c92de31e921933124e7eea0f9c44d40becbdff  logs/events-conflicting_validation_sets-seed1001.jsonl
+194c9bd30229dfc94786dbeb89921cc4fa3e4c9851dacf3ba9067269ed659286  logs/events-equivocation_double_sign-seed1001.jsonl
+dbb18af7b7da6d1c7d9aced6f459a82d6c9599fcd88f417592bbae8c973f76fa  logs/events-late_validations-seed1001.jsonl
+b87a2011b0a19b631dba8a9381610fbab417cd942255207c073563457754b1fc  logs/events-liveness_offline-seed1001.jsonl
