@@ -11,8 +11,7 @@ network.
 [FAKTA] The primary sources for the framework below are postfiatd source
 files at pinned commit `0085a1ff885d6a446369cf73a4430f75af22be55`, read
 2026-11-17. All file paths are relative to the postfiatd repository root.
-Line numbers are file lines (the raw-file display is 0-indexed, so file
-line = displayed line + 1).
+Line numbers are file lines, verified against a local checkout of the pinned commit and cross-checked against the GitHub API blob for each file.
 
 [ANALISIS] Labels used on every substantive claim in this pack:
 `[FAKTA]` — verified fact with a source, a date, and evidence;
@@ -35,13 +34,13 @@ only — no stake penalty, no jailing, no tombstoning.
 
 [FAKTA] What postfiatd does have is a Byzantine behavior detector. The
 generic `Validations::add()` in
-`src/xrpld/consensus/Validations.h` (lines 1197–1248) runs the detector
+`src/xrpld/consensus/Validations.h` (lines 623–707) runs the detector
 when a validation violates the increasing-sequence invariant, and
 `RCLValidations::handleNewValidation` in
-`src/xrpld/app/consensus/RCLValidations.cpp` (lines 304–513) logs
+`src/xrpld/app/consensus/RCLValidations.cpp` (lines 165–277) logs
 problematic validations from trusted validators at the highest level and
 deliberately relays them so peers observe them too (comment, lines
-449–463).
+243–251).
 
 [ANALISIS] The honest reading of the source is therefore: postfiatd can
 *detect* equivocation and *record* it, but cannot *punish* it. Any
@@ -55,18 +54,18 @@ model, not a network rule.
 ledger. The fields an evidence package needs are the fields the
 `RCLValidation` wrapper exposes in
 `src/xrpld/app/consensus/RCLValidations.h`:
-ledger ID (`ledgerID()`, line 106), ledger sequence (`seq()`, line 119),
-signing time (`signTime()`, line 132), first-seen time (`seenTime()`,
-line 145), signing key (`key()`, line 158), node ID (`nodeID()`, line
-171), trusted flag (`trusted()`, line 184, with `setTrusted()` /
-`setUntrusted()` at lines 195/206), full/partial flag (`full()`, line
-219), load fee (`loadFee()`, line 232), and cookie (`cookie()`, line
-245).
+ledger ID (`ledgerID()`, line 61), ledger sequence (`seq()`, line 68),
+signing time (`signTime()`, line 75), first-seen time (`seenTime()`,
+line 82), signing key (`key()`, line 89), node ID (`nodeID()`, line
+96), trusted flag (`trusted()`, line 103, with `setTrusted()` /
+`setUntrusted()` at lines 109/115), full/partial flag (`full()`, line
+122), load fee (`loadFee()`, line 129), and cookie (`cookie()`, line
+136).
 
 [FAKTA] `RCLValidations::handleNewValidation` records a trusted,
 current validation's vote through `ValidatorVoteTracker.recordVote`,
 using the validation's signing hash as proof (RCLValidations.cpp,
-lines 362–410), and then calls `checkAccept(hash, seq)` (line 438).
+lines 216–222), and then calls `checkAccept(hash, seq)` (line 237).
 
 [ANALISIS] The signing hash is therefore the natural evidence
 identifier: two validations from the same validator for the same
@@ -87,37 +86,37 @@ declarations. No claim in this pack depends on that file.
 [FAKTA] The detector works on three inputs per validation: the
 validator's identity, the ledger sequence, and the ledger ID. Its
 statuses are defined by the `ValStatus` enum in
-`src/xrpld/consensus/Validations.h` (lines 307–329): `current` (new,
+`src/xrpld/consensus/Validations.h` (lines 169–180): `current` (new,
 added), `stale` (not current or older), `badSeq` (violates the
 increasing-sequence requirement), `multiple` ("Multiple validations by
-a validator for the same ledger", lines 321–323), and `conflicting`
+a validator for the same ledger", lines 176–177), and `conflicting`
 ("Multiple validations by a validator for different ledgers", lines
-325–327).
+178–179).
 
 [FAKTA] The increasing-sequence invariant is enforced by `SeqEnforcer`
-(lines 175–244): `operator()` returns false when the offered sequence
+(lines 99–135): `operator()` returns false when the offered sequence
 is less than or equal to the largest sequence seen from that validator
-(lines 211–231), except that the stored sequence resets to 0 when more
+(lines 118–128), except that the stored sequence resets to 0 when more
 than `validationSET_EXPIRES` (10 minutes) has passed.
 
 [FAKTA] When the invariant fails and the new validation is for the same
 sequence as the one tracked, `Validations::add()` checks it closely
-(lines 1208–1248), in this order:
+(lines 653–681), in this order:
 
 1. Different ledger ID for the same sequence → `conflicting` (lines
-   1219–1221). The comment (lines 1212–1216) says this "could be the
+   664–665). The comment (lines 661–663) says this "could be the
    result of misconfiguration but it can also mean a Byzantine
    validator."
 2. Same ledger, different signing time → `conflicting` (lines
-   1232–1234), with the same comment (lines 1223–1229).
+   671–672), with the same comment (lines 667–670).
 3. Same sequence and ledger, different cookie → `multiple` (lines
-   1241–1243). The comment (lines 1236–1238) says this is "probably
+   676–677). The comment (lines 674–675) says this is "probably
    accidental misconfiguration."
-4. Otherwise → `badSeq` (line 1248).
+4. Otherwise → `badSeq` (line 680).
 
 [FAKTA] A tracked entry is replaced when the sign-time difference
 exceeds `validationCURRENT_WALL` (5 minutes) and the new validation's
-sign time is later (lines 1188–1192). The detector therefore forgets
+sign time is later (lines 644–650). The detector therefore forgets
 old duplicates and only compares validations signed within 5 minutes
 of each other.
 
@@ -133,17 +132,17 @@ different signal and needs its own rule (R7 in this pack).
 
 ## 5. What happens after detection
 
-[FAKTA] `handleNewValidation` (RCLValidations.cpp, lines 304–513)
+[FAKTA] `handleNewValidation` (RCLValidations.cpp, lines 165–277)
 marks trust from the validator list: a signing key is trusted if it is
 in the UNL (`app.validators().getTrustedKey(signingKey)`) and listed if
-it is on a validator list (`getListedKey`) (lines 329–341). Only
+it is on a validator list (`getListedKey`) (lines 177–185). Only
 validations that are `current` and trusted have their vote recorded
-(lines 362–410).
+(lines 216–222).
 
 [FAKTA] The two detector outcomes are logged as: `conflicting` →
 "Byzantine Behavior Detector:... Conflicting validation for {seq}!"
-(lines 490–498); `multiple` → "Byzantine Behavior Detector:...
-Multiple validations for {seq}/{hash}!" (lines 501–509).
+(lines 265–269); `multiple` → "Byzantine Behavior Detector:...
+Multiple validations for {seq}/{hash}!" (lines 271–275).
 
 [ANALISIS] Detection is therefore local and informational: each node
 logs and relays the offending validation, but no node removes the
@@ -162,22 +161,22 @@ received trusted validations meets or exceeds a quorum value
 trusted-list size is 125% of quorum when multiple lists are configured
 (line 170). The quorum itself is recomputed every round by
 `updateTrusted` (`src/xrpld/app/misc/detail/ValidatorList.cpp`, line
-4002: `quorum_ = calculateQuorum(unlSize, effectiveUnlSize, seenSize)`).
+1938; `quorum_ = calculateQuorum(unlSize, effectiveUnlSize, seenSize)` at line 2109).
 
-[FAKTA] `calculateQuorum` (ValidatorList.cpp, lines 3491–3669) uses a
+[FAKTA] `calculateQuorum` (ValidatorList.cpp, lines 1845–1935) uses a
 67% quorum: "Use a 67% quorum to balance fork safety, liveness, and
 required UNL overlap. Note: Original XRPL uses 80%, but this fork uses
 67% for devnet/testnet. For mainnet, this should be reverted to 80%."
-(lines 3595–3599, citing Theorem 8 of arXiv 1802.07242, Analysis of
-the XRP Ledger Consensus Protocol). The formula (lines 3665–3667) is
+(lines 1898–1903, citing Theorem 8 of arXiv 1802.07242, Analysis of
+the XRP Ledger Consensus Protocol). The formula (lines 1933–1934) is
 `max(ceil(effectiveUnlSize * 0.67), ceil(unlSize * 0.6))`, where the
 0.6 floor is the Negative UNL AbsoluteMinimumQuorum. A command-line
 `minimumQuorum_` overrides it, with a "potentially unsafe" warning
-(lines 3501–3514); if too many publishers are unavailable, quorum is
-disabled (`SIZE_MAX`, lines 3588–3590).
+(lines 1851–1857); if too many publishers are unavailable, quorum is
+disabled (`SIZE_MAX`, lines 1894–1895).
 
 [FAKTA] The consensus-layer constant agrees: `minCONSENSUS_PCT` = 67
-(`src/xrpld/consensus/ConsensusParms.h`, line 139).
+(`src/xrpld/consensus/ConsensusParms.h`, line 79).
 
 [ESTIMASI] For the modelled 53-validator set used by this pack,
 quorum = max(ceil(53 × 0.67), ceil(53 × 0.6)) = max(36, 32) = **36**.
@@ -199,33 +198,33 @@ instantly on a single late or divergent validation.
 ## 7. Timing parameters and staleness
 
 [FAKTA] `ValidationParms` (`src/xrpld/consensus/Validations.h`, lines
-82–161) sets: `validationCURRENT_WALL` = 5 minutes (line 100),
-`validationCURRENT_LOCAL` = 3 minutes (line 114),
-`validationCURRENT_EARLY` = 3 minutes (line 126),
-`validationSET_EXPIRES` = 10 minutes (line 140), and
-`validationFRESHNESS` = 20 seconds (line 159). The freshness comment
-(lines 142–155) says 20 seconds should be "sufficiently higher than
+46–90) sets: `validationCURRENT_WALL` = 5 minutes (line 56),
+`validationCURRENT_LOCAL` = 3 minutes (line 64),
+`validationCURRENT_EARLY` = 3 minutes (line 71),
+`validationSET_EXPIRES` = 10 minutes (line 79), and
+`validationFRESHNESS` = 20 seconds (line 89). The freshness comment
+(lines 81–88) says 20 seconds should be "sufficiently higher than
 ledgerMAX_CONSENSUS such that validators who are waiting for laggards
 are not considered offline."
 
-[FAKTA] `isCurrent` (lines 267–302) requires the sign time to be after
+[FAKTA] `isCurrent` (lines 149–166) requires the sign time to be after
 (now − 3 minutes) and before (now + 5 minutes), and the seen time to
 be before (now + 3 minutes).
 
 [FAKTA] The consensus parameters (`src/xrpld/consensus/ConsensusParms.h`)
-set `validationVALID_WALL` 5 minutes (line 91), `validationVALID_LOCAL`
-3 minutes (line 105), `validationVALID_EARLY` 3 minutes (line 117),
-`proposeFRESHNESS` 20 seconds (line 122), `proposeINTERVAL` 12 seconds
-(line 127), `ledgerMIN_CONSENSUS` 1950 ms (lines 151–153),
-`ledgerMAX_CONSENSUS` 15 seconds (lines 168–170), `ledgerMIN_CLOSE` 2
-seconds (line 175), `ledgerGRANULARITY` 1 second (line 180),
-`ledgerABANDON_CONSENSUS_FACTOR` 10 (line 185),
-`ledgerABANDON_CONSENSUS` 120 seconds (lines 200–202), and
-`avMIN_CONSENSUS_TIME` 5 seconds (lines 224–226). Avalanche cutoffs
-(lines 269–283) are 50% initially, 65% after 50% of the time, 70%
+set `validationVALID_WALL` 5 minutes (line 51), `validationVALID_LOCAL`
+3 minutes (line 59), `validationVALID_EARLY` 3 minutes (line 66),
+`proposeFRESHNESS` 20 seconds (line 69), `proposeINTERVAL` 12 seconds
+(line 72), `ledgerMIN_CONSENSUS` 1950 ms (lines 86–87),
+`ledgerMAX_CONSENSUS` 15 seconds (lines 95–96), `ledgerMIN_CLOSE` 2
+seconds (line 99), `ledgerGRANULARITY` 1 second (line 102),
+`ledgerABANDON_CONSENSUS_FACTOR` 10 (line 105),
+`ledgerABANDON_CONSENSUS` 120 seconds (lines 113–114), and
+`avMIN_CONSENSUS_TIME` 5 seconds (lines 126–127). Avalanche cutoffs
+(lines 146–157) are 50% initially, 65% after 50% of the time, 70%
 after 85% of the time, and 95% after 200% of the time;
-`avCT_CONSENSUS_PCT` = 75 (line 290), `avMIN_ROUNDS` = 2 (line 299),
-`avSTALLED_ROUNDS` = 4 (line 306).
+`avCT_CONSENSUS_PCT` = 75 (line 160), `avMIN_ROUNDS` = 2 (line 165),
+`avSTALLED_ROUNDS` = 4 (line 169).
 
 [ANALISIS] The 20-second freshness value is the natural threshold for
 a "late validation" warning: a validation signed more than 20 seconds
@@ -238,18 +237,18 @@ wall bounds.
 ## 8. Liveness machinery
 
 [FAKTA] `RCLConsensus` exposes `laggards(seq, trustedKeys)` (lines
-155–156), `getQuorumKeys()` (line 152),
-`proposersValidated(h)` (line 245), and
-`proposersFinished(...)` (line 256) in
+155–157), `getQuorumKeys()` (lines 151–152),
+`proposersValidated(h)` (lines 244–245), and
+`proposersFinished(...)` (lines 255–256) in
 `src/xrpld/app/consensus/RCLConsensus.h`, and `validate(ledger, txns,
-proposing)` (lines 414–417). `censorshipWarnInternal` = 15 (line 56):
+proposing)` (lines 413–417). `censorshipWarnInternal` = 15 (line 56):
 a transaction proposed 15 times without acceptance triggers a
 censorship warning.
 
 [FAKTA] `RCLCensorshipDetector` (`src/xrpld/app/consensus/RCLCensorshipDetector.h`)
 tracks proposed transactions with their round sequence (`propose()`,
-lines 82–97) and removes accepted ones (`check(accepted, pred)`,
-lines 114–131): censorship is a transaction proposed repeatedly but
+lines 81–97) and removes accepted ones (`check(accepted, pred)`,
+lines 113–131): censorship is a transaction proposed repeatedly but
 never accepted.
 
 [FAKTA] The Negative UNL lets servers adjust their effective UNL by
@@ -306,7 +305,7 @@ time, not discovery time.
 
 [FAKTA] CometBFT's evidence system detects and gossips Byzantine
 faults (CometBFT evidence spec, accessed 2026-11-17; updated
-2026-10-30). Valid `DuplicateVoteEvidence` requires: the same
+2026-11-10). Valid `DuplicateVoteEvidence` requires: the same
 validator address, height, round, and vote type for both votes;
 different BlockIDs; the validator in the validator set at that height;
 and correctly signed votes (the chain ID binds the fault to the
@@ -390,18 +389,18 @@ model choices:
 
 - **R1 CONFLICTING** — same validator, same ledger sequence, two
   validations with different ledger hashes. Mirrors
-  `Validations.h` lines 1219–1221. Slashable in the model.
+  `Validations.h` lines 664–665. Slashable in the model.
 - **R2 MULTIPLE** — same validator, same ledger sequence, same ledger
-  hash, different cookie. Mirrors `Validations.h` lines 1241–1243.
+  hash, different cookie. Mirrors `Validations.h` lines 676–677.
   Not slashable in the model (probable misconfiguration).
 - **R3 BADSEQ** — validation sequence not greater than the largest
   sequence previously accepted from the same validator. Mirrors
-  `SeqEnforcer` (`Validations.h` lines 211–231) and the `badSeq`
-  branch (line 1248). Validation dropped, no penalty in the model.
+  `SeqEnforcer` (`Validations.h` lines 118–128) and the `badSeq`
+  branch (line 680). Validation dropped, no penalty in the model.
 - **R4 STALE** — primary sign time more than 180 seconds before or
   more than 300 seconds after the ledger close time. Mirrors
   `validationCURRENT_EARLY` (3 minutes) and `validationCURRENT_WALL`
-  (5 minutes) (`Validations.h` lines 100, 126). Validation dropped,
+  (5 minutes) (`Validations.h` lines 56, 71). Validation dropped,
   no penalty in the model.
 - **R5 LIVENESS** — more than 10 missed validations inside any
   trailing window of 20 ledgers (signed below 50% of the window).
@@ -411,7 +410,7 @@ model choices:
   window drops back to or below the threshold.
 - **R6 LATE** — primary sign time more than 20 seconds after the
   ledger close time. Mirrors `validationFRESHNESS` (20 seconds)
-  (`Validations.h` line 159). Warning only, no penalty in the model.
+  (`Validations.h` line 89). Warning only, no penalty in the model.
 - **R7 DIVERGENT** — the validator's primary validation disagrees with
   the preferred (majority) ledger hash for 3 or more consecutive
   ledgers. Model choice: the 3-ledger threshold is arbitrary and is
@@ -437,7 +436,7 @@ borrowed from; the model column is the choice made for this pack.
 | Offense | Rule | Modelled slash (share of stake) | Modelled jail | Tombstone | Reference |
 |---|---|---|---|---|---|
 | Equivocation (conflicting) | R1 | 5% | none (permanent exclusion instead) | yes | Cosmos `SlashFractionDoubleSign` 0.05 |
-| Multiple (same ledger, different cookie) | R2 | 0% | none | no | postfiatd treats as probable misconfiguration (`Validations.h` lines 1236–1238) |
+| Multiple (same ledger, different cookie) | R2 | 0% | none | no | postfiatd treats as probable misconfiguration (`Validations.h` lines 674–675) |
 | Bad sequence | R3 | 0% | none | no | validation dropped |
 | Stale | R4 | 0% | none | no | validation dropped |
 | Liveness fault | R5 | 1% | 600 s | no | Cosmos `SlashFractionDowntime` 0.01, `DowntimeJailDuration` 600 s |

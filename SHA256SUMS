@@ -1,7 +1,7 @@
 360f2f48913be5fdc0290d7a54fa7a1aaa6e1cf4f9ed92bbacb3d3dc1e742d59  ./README.md
-dedc5f6c09044cbbf591868fa5c8098912be520c2f50728a9a8903b5038587cf  ./claim-to-evidence-index.md
+b5710a37ae9c11bd06fb154f51e8297f1f8bb29aea0bc8711e6878983b992011  ./claim-to-evidence-index.md
 72c34057532bc079c39fb43e6b0bab169807adb1130502b7b248ac9e78359c14  ./detection-table.md
-7aec96385c7992d109b50d9c27d1770623205b326b267e813f9b80316aefdffe  ./framework.md
+66a975738baf892a6ce5addcacdfa706fa12e62694325c69ef383bebb0cfa9e9  ./framework.md
 6b0998869b502bcf0bb15af8595bd8704f242fe0ccdcce185c0b4617f4d4ace4  ./logs/determinism-hashseed-check.log
 0390c5371b7724f53686c78f09e92245fc5d492bb0dda0de3eefaa23bb322c0f  ./logs/drill-run-1.log
 0390c5371b7724f53686c78f09e92245fc5d492bb0dda0de3eefaa23bb322c0f  ./logs/drill-run-2.log
