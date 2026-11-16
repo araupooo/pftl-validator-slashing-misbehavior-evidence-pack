@@ -1,0 +1,411 @@
+{
+  "config": {
+    "ledgers_per_run": 120,
+    "quorum": 36,
+    "seeds": [
+      1001,
+      1002,
+      1003,
+      1004,
+      1005
+    ],
+    "validator_count": 53
+  },
+  "per_scenario": {
+    "baseline_clean": {
+      "ground_truth_events_per_seed": 0,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31800,
+        "tp": 0
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 0
+        }
+      ],
+      "quorum_min": 53,
+      "rule_counts_pooled": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R5": 0,
+        "R6": 0,
+        "R7": 0
+      },
+      "validations_pooled": 31800
+    },
+    "benign_divergence": {
+      "ground_truth_events_per_seed": 0,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31800,
+        "tp": 0
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 0
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 0
+        }
+      ],
+      "quorum_min": 51,
+      "rule_counts_pooled": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R5": 0,
+        "R6": 0,
+        "R7": 0
+      },
+      "validations_pooled": 31800
+    },
+    "conflicting_validation_sets": {
+      "ground_truth_events_per_seed": 3,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31785,
+        "tp": 15
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 3
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 3
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 3
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 3
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 3
+        }
+      ],
+      "quorum_min": 50,
+      "rule_counts_pooled": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R5": 0,
+        "R6": 0,
+        "R7": 15
+      },
+      "validations_pooled": 31800
+    },
+    "equivocation_double_sign": {
+      "ground_truth_events_per_seed": 21,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31695,
+        "tp": 105
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 21
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 21
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 21
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 21
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 21
+        }
+      ],
+      "quorum_min": 53,
+      "rule_counts_pooled": {
+        "R1": 100,
+        "R2": 5,
+        "R3": 0,
+        "R4": 0,
+        "R5": 0,
+        "R6": 0,
+        "R7": 0
+      },
+      "validations_pooled": 31905
+    },
+    "late_validations": {
+      "ground_truth_events_per_seed": 40,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31600,
+        "tp": 200
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 40
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 40
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 40
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 40
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 40
+        }
+      ],
+      "quorum_min": 53,
+      "rule_counts_pooled": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R5": 0,
+        "R6": 200,
+        "R7": 0
+      },
+      "validations_pooled": 31800
+    },
+    "liveness_offline": {
+      "ground_truth_events_per_seed": 2,
+      "metrics_pooled": {
+        "fn": 0,
+        "fp": 0,
+        "fpr": 0.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tn": 31790,
+        "tp": 10
+      },
+      "per_seed": [
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1001,
+          "tp": 2
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1002,
+          "tp": 2
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1003,
+          "tp": 2
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1004,
+          "tp": 2
+        },
+        {
+          "fn": 0,
+          "fp": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "seed": 1005,
+          "tp": 2
+        }
+      ],
+      "quorum_min": 51,
+      "rule_counts_pooled": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R5": 10,
+        "R6": 0,
+        "R7": 0
+      },
+      "validations_pooled": 31500
+    }
+  },
+  "quorum": {
+    "holds": true,
+    "min_primary_validations_for_majority": 50,
+    "quorum": 36
+  }
+}
